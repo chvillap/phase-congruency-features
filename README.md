@@ -9,8 +9,11 @@ The phase congruency measure is proportional to the local energy of the signal, 
 More details about phase congruency and its applications can be found in the following papers:
 
 > Kovesi, P., 2000. Phase congruency: A low-level image invariant. Psychological Research 64, 136-148.
+
 > Kovesi, P., 2003. Phase congruency detects corners and edges, in: The Australian Pattern Recognition Society Conference: DICTA, pp. 309-318.
+
 > Ferrari, R.J., Allaire, S., Hope, A., Kim, J., Jaffray, D., Pekar, V., 2011. Detection of point landmarks in 3D medical images via phase congruency model. Journal of the Brazilian Computer Society 17, 117-132.
+
 > Villa Pinto, C.H.; Ferrari, R.J., 2016. Initialization of deformable models in 3D magnetic resonance images guided by automatically detected phase congruency point landmarks. Pattern Recognition Letters 79, 1-7.
 
 ...among several others. In addition, [Dr. Peter Kovesi's website](http://www.peterkovesi.com) contains some great MATLAB implementations for 2D images.
