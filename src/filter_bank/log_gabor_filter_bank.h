@@ -49,17 +49,17 @@ public:
     /**
      * @brief Constructor method.
      * 
-     * @param[in] filename_prefix  Prefix for the filter file names.
-     * @param[in] sizes            Size of the filter in each dimension.
+     * @param[in] filename_prefix  Prefix of the filter file names.
+     * @param[in] sizes            Filter size in each dimension.
      * @param[in] num_scales       Number of filter scales.
      * @param[in] num_azimuths     Number of filter azimuth angles.
      * @param[in] num_elevations   Number of filter elevation angles.
      * @param[in] max_frequency    Maximum central frequency.
      * @param[in] mult_factor      Multiplicative factor of filter frequencies.
-     * @param[in] frequency_ratio  Constant frequency spread ratio.
-     * @param[in] angular_ratio    Constant angular spread ratio.
-     * @param[in] lowpass_order    Order of the Butterworth lowpass filter.
-     * @param[in] lowpass_cutoff   Cut-off of the Butterworth lowpass filter.
+     * @param[in] frequency_ratio  Frequency spread ratio.
+     * @param[in] angular_ratio    Angular spread ratio.
+     * @param[in] lowpass_order    Butterworth lowpass filter order.
+     * @param[in] lowpass_cutoff   Butterworth lowpass filter cut-off.
      * @param[in] uniform_sampling Defines the filter sampling approach.
      */
     log_gabor_filter_bank(std::string    filename_prefix,

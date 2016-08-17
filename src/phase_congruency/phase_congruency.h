@@ -52,15 +52,15 @@ public:
     /**
      * @brief Constructor method.
      *
-     * @param[in] filename_prefix Prefix for the output file names.
+     * @param[in] filename_prefix Prefix of the output file names.
      * @param[in] input_image     Input image data.
      * @param[in] filter_bank     Bank of log-Gabor filters.
      * @param[in] sizes           Image and filter size in each dimension.
-     * @param[in] input_mask      Logical mask for the region of interest.
+     * @param[in] input_mask      Logical mask of the region of interest.
      * @param[in] noise_threshold Noise energy suppression threshold.
      * @param[in] noise_std       Standard deviation of the noise model.
-     * @param[in] sigmoid_gain    Gain for the sigmoidal response weighting. 
-     * @param[in] sigmoid_cutoff  Cutoff for the sigmoidal response weighting.
+     * @param[in] sigmoid_gain    Sigmoidal response weighting gain.
+     * @param[in] sigmoid_cutoff  Sigmoidal response weighting cut-off.
      */
     phase_congruency(std::string            filename_prefix,
                      float                 *input_image,
