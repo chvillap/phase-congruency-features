@@ -6,7 +6,7 @@
  * @ingroup    utils
  *
  * @copyright Copyright (c) 2016 Carlos Henrique Villa Pinto
- * @license MIT License
+ * @license GPL v2.0
  */
 
 #ifndef TYPES_H

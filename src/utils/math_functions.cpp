@@ -6,7 +6,7 @@
  * @ingroup    utils
  *
  * @copyright Copyright (c) 2016 Carlos Henrique Villa Pinto
- * @license MIT License
+ * @license GPL v2.0
  */
 
 #include "math_functions.h"
@@ -143,7 +143,7 @@ hanning(triple<size_t> xyz, triple<size_t> sizes)
 float
 median(float *array, size_t size)
 {
-    debug::assert(array != NULL);
+    debug::assert2(array != NULL);
 
     // Copy the data to an auxiliary vector.
     std::vector<float> aux;

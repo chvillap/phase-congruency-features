@@ -6,7 +6,7 @@
  * @ingroup    filter_bank
  *
  * @copyright Copyright (c) 2016 Carlos Henrique Villa Pinto
- * @license MIT License
+ * @license GPL v2.0
  */
 
 #include "log_gabor_filter_bank.h"
@@ -98,9 +98,9 @@ float*
 log_gabor_filter_bank::
 get_filter(size_t scale, size_t azimuth, size_t elevation)
 {
-    debug::assert(elevation < m_num_elevations);
-    debug::assert(azimuth < m_num_azimuths_per_elevation[elevation]);
-    debug::assert(scale < m_num_scales);
+    debug::assert2(elevation < m_num_elevations);
+    debug::assert2(azimuth < m_num_azimuths_per_elevation[elevation]);
+    debug::assert2(scale < m_num_scales);
 
     #ifdef LOG_GABOR_FILTER_BANK_DEBUG_ON
         std::cout << "Getting filter: "
@@ -189,8 +189,8 @@ log_gabor_filter_bank*
 log_gabor_filter_bank::
 read_parameters(std::string filename)
 {
-    debug::assert(!filename.empty());
-    debug::assert(filename.find_last_of(".bof") != std::string::npos);
+    debug::assert2(!filename.empty());
+    debug::assert2(filename.find_last_of(".bof") != std::string::npos);
 
     triple<size_t> sizes;
     size_t num_scales, num_azimuths, num_elevations;

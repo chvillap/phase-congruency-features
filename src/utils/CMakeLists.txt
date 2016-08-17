@@ -7,7 +7,7 @@ PROJECT("utils")
 SET(LIBRARY_NAME
     "bip_utils")
 SET(LIBRARY_SOURCE_FILES
-    "assert.cpp"
+    "assert2.cpp"
     "math_functions.cpp")
 
 ADD_LIBRARY(

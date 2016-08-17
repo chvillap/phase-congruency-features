@@ -1,15 +1,15 @@
 /**
- * @file   assert.cpp
+ * @file   assert2.cpp
  * @author Carlos H. Villa Pinto (chvillap@gmail.com)
  *
  * @addtogroup utils
  * @ingroup    utils
  *
  * @copyright Copyright (c) 2016 Carlos Henrique Villa Pinto
- * @license MIT License
+ * @license GPL v2.0
  */
 
-#include "assert.h"
+#include "assert2.h"
 
 
 namespace bip
@@ -19,7 +19,7 @@ namespace debug
 
 
 void
-_assert(bool passed, const char *assertion, const char *file, long line)
+_assert2(bool passed, const char *assertion, const char *file, long line)
 {
     if (!passed) {
         std::stringstream ss;

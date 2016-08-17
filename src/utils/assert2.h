@@ -6,11 +6,11 @@
  * @ingroup    utils
  *
  * @copyright Copyright (c) 2016 Carlos Henrique Villa Pinto
- * @license MIT License
+ * @license GPL v2.0
  */
 
-#ifndef ASSERT_H
-#define ASSERT_H
+#ifndef ASSERT2_H
+#define ASSERT2_H
 
 #include <cstddef>
 #include <cassert>
@@ -26,7 +26,7 @@ namespace debug
 {
 
 /**
- * @fn _assert
+ * @fn _assert2
  *
  * @brief Internal function to display an assertion failed message.
  * 
@@ -38,23 +38,23 @@ namespace debug
  * @attention This function is automatically called by the bip::debug::assert
  *            macro and therefore it should not be directly called by the user.
  *
- * @see assert
+ * @see assert2
  */
-void _assert(bool passed, const char *assertion, const char *file, long line);
+void _assert2(bool passed, const char *assertion, const char *file, long line);
 
 /**
- * @def assert
+ * @def assert2
  *
  * @brief Macro for assertion checking that works for any build type.
  * 
  * @param[in] expr Assertion expression.
  *
- * @see _assert
+ * @see _assert2
  */
 // #ifdef NDEBUG
-    // #define assert(expr) _assert(true, "", "", 0)
+    // #define assert2(expr) _assert2(true, "", "", 0)
 // #else
-    #define assert(expr) _assert(expr, #expr, __FILE__, __LINE__)
+    #define assert2(expr) _assert2(expr, #expr, __FILE__, __LINE__)
 // #endif
 
 

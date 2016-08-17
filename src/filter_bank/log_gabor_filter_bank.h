@@ -6,7 +6,7 @@
  * @ingroup    filter_bank
  *
  * @copyright Copyright (c) 2016 Carlos Henrique Villa Pinto
- * @license MIT License
+ * @license GPL v2.0
  */
 
 #ifndef LOG_GABOR_FILTER_BANK_H
@@ -20,7 +20,7 @@
 #include <iomanip>
 #include <fstream>
 #include <string>
-#include "assert.h"
+#include "assert2.h"
 #include "types.h"
 #include "math_functions.h"
 
@@ -156,7 +156,7 @@ public:
 
     /** @brief Getter for m_num_azimuths_per_elevation. */
     size_t get_num_azimuths_per_elevation(size_t elevation) const {
-        debug::assert(elevation < m_num_elevations);
+        debug::assert2(elevation < m_num_elevations);
         return m_num_azimuths_per_elevation[elevation];
     }
 
@@ -242,7 +242,7 @@ private:
 
     /** @brief Setter for m_filename_prefix. */
     void set_filename_prefix(std::string filename_prefix) {
-        debug::assert(!filename_prefix.empty());
+        debug::assert2(!filename_prefix.empty());
         m_filename_prefix = filename_prefix;
     }
 
@@ -253,55 +253,55 @@ private:
 
     /** @brief Setter for m_num_scales. */
     void set_num_scales(size_t num_scales) {
-        debug::assert(num_scales > 0);
+        debug::assert2(num_scales > 0);
         m_num_scales = num_scales;
     }
 
     /** @brief Setter for m_num_azimuths. */
     void set_num_azimuths(size_t num_azimuths) {
-        debug::assert(num_azimuths > 0);
+        debug::assert2(num_azimuths > 0);
         m_num_azimuths = num_azimuths;
     }
 
     /** @brief Setter for m_num_elevations. */
     void set_num_elevations(size_t num_elevations) {
-        debug::assert(num_elevations > 0);
+        debug::assert2(num_elevations > 0);
         m_num_elevations = num_elevations;
     }
 
     /** @brief Setter for m_max_frequency. */
     void set_max_frequency(float max_frequency) {
-        debug::assert(max_frequency > 0.0 && max_frequency < 0.5);
+        debug::assert2(max_frequency > 0.0 && max_frequency < 0.5);
         m_max_frequency = max_frequency;
     }
 
     /** @brief Setter for m_mult_factor. */
     void set_mult_factor(float mult_factor) {
-        debug::assert(mult_factor > 0.0);
+        debug::assert2(mult_factor > 0.0);
         m_mult_factor = mult_factor;
     }
 
     /** @brief Setter for m_frequency_ratio. */
     void set_frequency_ratio(float frequency_ratio) {
-        debug::assert(frequency_ratio > 0.0);
+        debug::assert2(frequency_ratio > 0.0);
         m_frequency_ratio = frequency_ratio;
     }
 
     /** @brief Setter for m_angular_ratio. */
     void set_angular_ratio(float angular_ratio) {
-        debug::assert(angular_ratio > 0.0);
+        debug::assert2(angular_ratio > 0.0);
         m_angular_ratio = angular_ratio;
     }
 
     /** @brief Setter for m_lowpass_order. */
     void set_lowpass_order(float lowpass_order) {
-        debug::assert(lowpass_order > 0.0);
+        debug::assert2(lowpass_order > 0.0);
         m_lowpass_order = lowpass_order;
     }
 
     /** @brief Setter for m_lowpass_cutoff. */
     void set_lowpass_cutoff(float lowpass_cutoff) {
-        debug::assert(lowpass_cutoff > 0.0 && lowpass_cutoff <= 0.5);
+        debug::assert2(lowpass_cutoff > 0.0 && lowpass_cutoff <= 0.5);
         m_lowpass_cutoff = lowpass_cutoff;
     }
 
