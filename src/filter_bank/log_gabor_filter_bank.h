@@ -49,7 +49,7 @@ public:
     /**
      * @brief Constructor method.
      * 
-     * @param[in] filename_prefix  Prefix for the filter filenames.
+     * @param[in] filename_prefix  Prefix for the filter file names.
      * @param[in] sizes            Size of the filter in each dimension.
      * @param[in] num_scales       Number of filter scales.
      * @param[in] num_azimuths     Number of filter azimuth angles.

@@ -139,12 +139,12 @@ compute()
 
     // Variation in the elevation angle.
     float dtheta = (m_num_elevations == 1) ?
-                   0 :
+                   0.0 :
                    M_PI_2 / (m_num_elevations - 1);
 
     for (size_t e = 0; e < m_num_elevations; ++e) {
         // Variation in the azimuth angle.
-        float dphi = 0;
+        float dphi = 0.0;
         if (m_num_azimuths > 1) {
             dphi = (e == 0) ?
                    M_PI / m_num_azimuths_per_elevation[e] :
@@ -337,24 +337,24 @@ create_filter(float freq0, float phi0, float theta0)
     // Iterate through the frequency domain coordinates.
     for (size_t i = 0, z = 0; z < m_sizes[2]; ++z) {
         float w = (m_sizes[2] == 1) ?
-                  0 :
+                  0.0 :
                   0.5 - (float) z / m_sizes[2];
 
         for (size_t y = 0; y < m_sizes[1]; ++y) {
             float v = (m_sizes[1] == 1) ?
-                      0 :
+                      0.0 :
                       0.5 - (float) y / m_sizes[1];
 
             for (size_t x = 0; x < m_sizes[0]; ++x, ++i) {
                 float u = (m_sizes[0] == 1) ?
-                          0 :
+                          0.0 :
                          -0.5 + (float) x / m_sizes[0];
 
                 // Get the frequency value.
                 float freq = sqrt(sqr(u) + sqr(v) + sqr(w));
 
                 if (freq < EPSILON)
-                    filter[i] = 0;
+                    filter[i] = 0.0;
                 else {
                     // Project the sample point in the cartesian space.
                     float uu = u * cos_theta_cos_phi;
@@ -406,8 +406,10 @@ read_filter(size_t scale, size_t azimuth, size_t elevation)
 
     std::string filename(m_filename_prefix + std::string(filename_suffix));
 
-    // Read the filter data from file.
-    // float *filter = image2array<float, 3>(read_image<float, 3>(filename));
+    /*
+     * TODO:
+     * Use some library to read 2D/3D images here.
+     */
     float *filter = NULL;
 
     return filter;
@@ -426,8 +428,10 @@ write_filter(float *filter, size_t scale, size_t azimuth, size_t elevation)
 
     std::string filename(m_filename_prefix + std::string(filename_suffix));
 
-    // Write the filter data into the file.
-    // write_image<float, 3>(filename, array2image<float, 3>(filter, m_sizes));
+    /*
+     * TODO:
+     * Use some library to write 2D/3D images here.
+     */
 }
 
 

@@ -38,7 +38,7 @@ void show_usage(char *argv[])
            "                      Log-Gabor Filter Bank                     \n"
            "----------------------------------------------------------------\n"
            " Basic usage: %s                                                \n"
-           "              -o output-filename-prefix                         \n"
+           "              -o output_filename_prefix                         \n"
            "----------------------------------------------------------------\n"
            " Options [description = default values]                         \n"
            "----------------------------------------------------------------\n"

@@ -128,14 +128,14 @@ float
 hanning(triple<size_t> xyz, triple<size_t> sizes)
 {
     const float hx = (sizes[0] == 1) ?
-                     1 :
-                     0.5 * (1 - cos(2*M_PI * xyz[0] / (sizes[0]-1)));
+                     1.0 :
+                     0.5 * (1.0 - cos(2*M_PI * xyz[0] / (sizes[0]-1)));
     const float hy = (sizes[1] == 1) ?
-                     1 :
-                     0.5 * (1 - cos(2*M_PI * xyz[1] / (sizes[1]-1)));
+                     1.0 :
+                     0.5 * (1.0 - cos(2*M_PI * xyz[1] / (sizes[1]-1)));
     const float hz = (sizes[2] == 1) ?
-                     1 :
-                     0.5 * (1 - cos(2*M_PI * xyz[2] / (sizes[2]-1)));
+                     1.0 :
+                     0.5 * (1.0 - cos(2*M_PI * xyz[2] / (sizes[2]-1)));
     return hx * hy * hz;
 }
 
