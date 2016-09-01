@@ -61,7 +61,7 @@ sph2cart(triple<float> sph)
 
 
 void
-fast_fourier_transform(fftwf_complex *M, triple<size_t> sizes, bool backward)
+FFT(fftwf_complex *M, triple<size_t> sizes, bool backward)
 {
     const size_t dimensions = 3;
 
@@ -166,7 +166,7 @@ median(float *array, size_t size)
 
 
 void
-normalize_minmax(float *array, size_t size, float new_min, float new_max)
+normalize_min_max(float *array, size_t size, float new_min, float new_max)
 {
     float old_min =  FLT_MAX;
     float old_max = -FLT_MAX;

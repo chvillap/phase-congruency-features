@@ -133,6 +133,32 @@ public:
     }
     
 private:
+    /**
+     * @brief Computes the DC-shifted forward FFT of the input image.
+     * 
+     * @param[out] target Preallocated complex image to compute.
+     *
+     * @return The resulting Fourier transform as a complex image.
+     */
+    void compute_shifted_FFT(fftwf_complex *f_target);
+
+    /**
+     * @brief Applies a single log-Gabor filter to a complex image in the
+     * frequency domain.
+     *
+     * @param[out] f_output  Preallocated output complex image.
+     * @param[in]  f_input   Preallocated input complex image.
+     * @param[in]  scale     Filter scale parameter.
+     * @param[in]  azimuth   Filter azimuth parameter.
+     * @param[in]  elevation Filter elevation parameter.
+     *
+     */
+    void compute_filtering(fftwf_complex *f_output,
+                           fftwf_complex *f_input,
+                           size_t         scale,
+                           size_t         azimuth,
+                           size_t         elevation);
+
     /** @brief Setter for m_filename_prefix. */
     void set_filename_prefix(std::string filename_prefix) {
         debug::assert2(!filename_prefix.empty());

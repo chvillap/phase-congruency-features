@@ -122,6 +122,21 @@ public:
     static void write_parameters(log_gabor_filter_bank &bof);
 
     /**
+     * @brief Gets the number of azimuth angles in a specific elevation.
+     * 
+     * @param[in] elevation Elevation index (not angle!).
+     *
+     * @returns Number of azimuth angles in the specified elevation.
+     *
+     * @warning When filters are uniformly sampled, the number of azimuth
+     * angles is the same for all elevations.
+     */
+    size_t get_num_azimuths(size_t elevation) const {
+        debug::assert2(elevation < m_num_elevations);
+        return m_num_azimuths_per_elevation[elevation];
+    }
+
+    /**
      * @brief Calculates the total number of filter orientations according to
      * the numbers of azimuth and elevation angles and the filter sampling.
      * 
@@ -152,12 +167,6 @@ public:
     /** @brief Getter for m_num_azimuths. */
     size_t get_num_azimuths() const {
         return m_num_azimuths;
-    }
-
-    /** @brief Getter for m_num_azimuths_per_elevation. */
-    size_t get_num_azimuths_per_elevation(size_t elevation) const {
-        debug::assert2(elevation < m_num_elevations);
-        return m_num_azimuths_per_elevation[elevation];
     }
 
     /** @brief Getter for num_elevations. */
