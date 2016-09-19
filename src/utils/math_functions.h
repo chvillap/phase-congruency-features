@@ -19,6 +19,8 @@
 #include <algorithm>
 #include <vector>
 #include <fftw3.h>
+#include <gsl/gsl_math.h>
+#include <gsl/gsl_eigen.h>
 #include "assert2.h"
 #include "types.h"
 
@@ -176,6 +178,17 @@ void FFT(fftwf_complex *M, triple<size_t> sizes, bool backward = false);
  * @returns A real value in the [0-1] range.
  */
 float hanning(triple<size_t> xyz, triple<size_t> sizes);
+
+/**
+ * @fn eigen
+ *
+ * @brief Computes the eigenvalues and eigenvectors of a given matrix.
+ * 
+ * @param[in]  M            Input matrix.
+ * @param[out] eigenvalues  Output array of ordered eigenvalues.
+ * @param[out] eigenvectors Output array of ordered eigenvectors.
+ */
+void eigen(double *M, double *eigenvalues, double *eigenvectors);
 
 /**
  * @fn median

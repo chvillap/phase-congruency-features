@@ -153,7 +153,7 @@ compute()
                                M_PI*2 / m_filter_bank->get_num_azimuths(e);
 
         for (size_t a = 0; a < m_filter_bank->get_num_azimuths(e); ++a) {
-            // Noise energy suppresion threshold.
+            // Noise energy threshold.
             float T = 0.0;
 
             // Get the current azimuth angle.
@@ -175,7 +175,7 @@ compute()
                 // filtered images array.
                 compute_filtering(p_f_filtered_image, f_input_image, s, a, e);
 
-                // Accumulate amplitude responses over scales.
+                // Accumulate amplitudes of filter responses over the scales.
                 for (size_t i = 0; i < total_size; ++i) {
                     // Ignore locations outside the region of interest.
                     if (m_input_mask && !m_input_mask[i])
@@ -191,16 +191,7 @@ compute()
 
                 // Automatic noise energy threshold estimation.
                 if (m_noise_threshold < 0.0 && s == 0) {
-                    float tau = median(sum_amplitude, total_size) /
-                                sqrt(log(4.0));
-                    float invmult = 1.0 / m_filter_bank->get_mult_factor();
-                    float nscales = m_filter_bank->get_num_scales();
-                    float total_tau = tau * (1.0 - pow(invmult, nscales)) /
-                                            (1.0 - invmult);
-                    float noise_mean = total_tau * sqrt(M_PI_2);
-                    float noise_sigma = total_tau * sqrt((4.0 - M_PI) / 2.0);
-
-                    T = noise_mean + m_noise_std * noise_sigma;
+                    T = estimate_noise_threshold(sum_amplitude);
 
                     #ifdef PHASE_CONGRUENCY_DEBUG_ON
                         std::cout << " (estimated T = " << T << ")";
@@ -210,19 +201,227 @@ compute()
                 #ifdef PHASE_CONGRUENCY_VERBOSE_ON
                     std::cout << " - done";
                 #endif
-
-                // The same block of memory is reused in the computation of all
-                // directional PC maps, so data assigned in the previous
-                // orientation must be cleaned.
-                memset(directional_pc_map, 0, sizeof(directional_pc_map));
-
-                /*
-                 * TODO:
-                 * Write the rest!
-                 */
             }
+
+            // The same block of memory is reused in the computation of all
+            // directional PC maps, so data assigned in the previous
+            // orientation must be cleaned.
+            memset(directional_pc_map, 0, sizeof(directional_pc_map));
+
+            for (size_t i = 0; i < total_size; ++i) {
+                // Ignore locations outside the region of interest.
+                if (m_input_mask && !m_input_mask[i])
+                    continue;
+
+                // Accumulate the even and odd filter responses over scales.
+                float sum_even = 0.0;
+                float sum_odd  = 0.0;
+                for (size_t s = 0; s < m_filter_bank->get_num_scales(); ++s)
+                {
+                    // Pointer to the filtered image at the current scale.
+                    fftwf_complex *p_f_filtered_image =
+                        &f_filtered_images[s * total_size];
+
+                    // Accumulate the even and odd filter responses.
+                    sum_even += p_f_filtered_image[i][0];
+                    sum_odd  += p_f_filtered_image[i][1];
+                }
+
+                // Get the mean filter responses over scales.
+                float norm      = sqrt(sqr(sum_even) + sqr(sum_odd));
+                float mean_even = sum_even / (norm + EPSILON);
+                float mean_odd  = sum_odd  / (norm + EPSILON);
+
+                // Compute the local energy response for the current
+                // orientation.
+                float local_energy = 0.0;
+                for (size_t s = 0; s < m_filter_bank->get_num_scales(); ++s)
+                {
+                    // Pointer to the filtered image at the current scale.
+                    fftwf_complex *p_f_filtered_image =
+                        &f_filtered_images[s * total_size];
+
+                    float even = p_f_filtered_image[i][0];
+                    float odd  = p_f_filtered_image[i][1];
+
+                    // Theoretically, we need to compute the product of the
+                    // amplitude of the filter responses by the phase deviation
+                    // at the current pixel.
+                    // In practice, this is the same as computing:
+                    local_energy += (even * mean_even + odd * mean_odd) -
+                                fabs(even * mean_odd - odd * mean_even);
+                }
+
+                // Apply the noise energy threshold to the local energy
+                // (either an automatically calculated threshold or a manually
+                // given one).
+                if (m_noise_threshold < 0.0)
+                    local_energy -= T;
+                else
+                    local_energy -= m_noise_threshold;
+
+                // Apply the local energy weighting.
+                local_energy = apply_energy_weighting(
+                    local_energy, sum_amplitude[i], max_amplitude[i]);
+
+                // Accumulate the total sums in amplitude and energy along
+                // all orientations.
+                total_sum_amplitude[i] += sum_amplitude[i];
+                total_sum_energy[i]    += local_energy;
+
+                // Compute the local phase congruency for the current location
+                // and orientation.
+                float local_pc = local_energy / (sum_amplitude[i] + EPSILON);
+
+                // Set the pixel value for the current pixel of the current
+                // orientation's directional PC map.
+                directional_pc_map[i] = local_pc;
+
+                // Update the pixel at the directional PC maxima map if needed.
+                if (local_pc > directional_pc_max_map[i][0]) {
+                    directional_pc_max_map[i][0] = local_pc;
+                    directional_pc_max_map[i][1] = phi;
+                    directional_pc_max_map[i][2] = theta;
+                }
+
+                // Project the local PC responses in the cartesian space.
+                float proj_x = local_pc * cos_theta * cos_phi;
+                float proj_y = local_pc * cos_theta * sin_phi;
+                float proj_z = local_pc * sin_theta;
+
+                // Accumulate the covariances between these projected responses
+                // over the orientations.
+                cov_xx[i] += sqr(proj_x);
+                cov_yy[i] += sqr(proj_y);
+                cov_zz[i] += sqr(proj_z);
+                cov_xy[i] += proj_x * proj_y;
+                cov_xz[i] += proj_x * proj_z;
+                cov_yz[i] += proj_y * proj_z;
+            }
+
+            // Write the directional PC map.
+            /*
+             * TODO:
+             * Use some library to write 2D/3D images here.
+             */
+
+            ++o; // Move on to the next orientation.
         }
     }
+
+    // Write the directional PC maxima map.
+    /*
+     * TODO:
+     * Use some library to write 2D/3D images here.
+     */
+
+    // Compute and write the final phase congruency map.
+    for (size_t i = 0; i < total_size; ++i)
+        pc_map[i] = total_sum_energy[i] / (total_sum_amplitude[i] + EPSILON);
+    /*
+     * TODO:
+     * Use some library to write 2D/3D images here.
+     */
+
+    // Clean up the memory.
+    delete[] sum_amplitude;
+    delete[] max_amplitude;
+    delete[] total_sum_amplitude;
+    delete[] total_sum_energy;
+    delete[] pc_map;
+    delete[] directional_pc_map;
+    delete[] directional_pc_max_map;
+    fftwf_free(f_input_image);
+    fftwf_free(f_filtered_images);
+    fftwf_cleanup_threads();
+
+
+    #ifdef PHASE_CONGRUENCY_VERBOSE_ON
+        std::cout << "Computing PC moments, eigenvalues and eigenvectors";
+    #endif
+
+    // Covariance normalization factor.
+    float orientations = static_cast<float>(
+        m_filter_bank->get_num_orientations());
+    float half_orientations = 0.5 * orientations;
+
+    for (size_t i = 0, z = 0; z < m_sizes[2]; ++z)
+        for (size_t y = 0; y < m_sizes[1]; ++y)
+            for (size_t x = 0; x < m_sizes[0]; ++x, ++i) {
+                // Ignore locations outside the region of interest.
+                if (m_input_mask && !m_input_mask[i])
+                    continue;
+
+                // Finish the covariances calculation.
+                cov_xx[i] /= half_orientations;
+                cov_xy[i] /= orientations;
+                cov_xz[i] /= orientations;
+                cov_yy[i] /= half_orientations;
+                cov_yz[i] /= orientations;
+                cov_zz[i] /= half_orientations;
+
+                // Compute the eigenvalues and eigenvectors of the covariance
+                // matrix.
+                // PS: if we have 1D or 2D data, all covariances related to Y
+                // and/or Z are going to be 0, so it will be the same as
+                // computing the eigenvalues/eigenvectors of a 1D or 2D matrix
+                // in the end.
+                double M[9] = {
+                    cov_xx[i], cov_xy[i], cov_xz[i],
+                    cov_xy[i], cov_yy[i], cov_yz[i],
+                    cov_xz[i], cov_yz[i], cov_zz[i]
+                };
+                double eigenvalues[3];
+                double eigenvectors[9];
+                eigen(M, eigenvalues, eigenvectors);
+
+                // Set the pixel at the eigenvalues and eigenvectors maps.
+                for (size_t d = 0; d < 3; ++d) {
+                    moments_eigenvalues_maps[d][i]     = eigenvalues[d];
+                    moments_eigenvectors_maps[d][i][0] = eigenvectors[3*d];
+                    moments_eigenvectors_maps[d][i][1] = eigenvectors[3*d + 1];
+                    moments_eigenvectors_maps[d][i][2] = eigenvectors[3*d + 2];
+
+                    // We are actually saving these maps as the eigenvectors
+                    // scaled by their respective eigenvalues.
+                    moments_eigenvectors_maps[d][i][0] *= eigenvalues[d];
+                    moments_eigenvectors_maps[d][i][1] *= eigenvalues[d];
+                    moments_eigenvectors_maps[d][i][2] *= eigenvalues[d];                    
+                }
+            }
+
+    // Write all the eigenvalues and eigenvectors maps.
+    for (size_t d = 0; d < 3; ++d) {
+        char filename_suffix[16];
+
+        sprintf(filename_suffix, "eigenvalues_%u", d);
+        /*
+        * TODO:
+        * Use some library to write 2D/3D images here.
+        */
+
+        sprintf(filename_suffix, "eigenvectors_%u", d);
+        /*
+         * TODO:
+         * Use some library to write 2D/3D images here.
+         */
+    }
+    
+    // Clean up memory.
+    delete[] cov_xx;
+    delete[] cov_xy;
+    delete[] cov_xz;
+    delete[] cov_yy;
+    delete[] cov_yz;
+    delete[] cov_zz;
+    for (size_t d = 0; d < 3; ++d) {
+        delete[] moments_eigenvalues_maps[d];
+        delete[] moments_eigenvectors_maps[d];
+    }
+
+    #ifdef PHASE_CONGRUENCY_VERBOSE_ON
+        std::cout << " - done";
+    #endif
 }
 
 
@@ -380,6 +579,45 @@ compute_filtering(fftwf_complex *f_output,
         delete[] f_amplitude;
     }
     #endif
+}
+
+
+float
+phase_congruency::
+estimate_noise_threshold(float *sum_amplitude)
+{
+    const size_t total_size = m_sizes[0] * m_sizes[1] * m_sizes[2];
+
+    float tau         = median(sum_amplitude, total_size) / sqrt(log(4.0));
+    float invmult     = 1.0 / m_filter_bank->get_mult_factor();
+    float nscales     = m_filter_bank->get_num_scales();
+    float total_tau   = tau * (1.0 - pow(invmult, nscales)) / (1.0 - invmult);
+    float noise_mean  = total_tau * sqrt(M_PI_2);
+    float noise_sigma = total_tau * sqrt((4.0 - M_PI) / 2.0);
+
+    return noise_mean + m_noise_std * noise_sigma;
+}
+
+
+float
+phase_congruency::
+apply_energy_weighting(float energy, float sum_amplitude, float max_amplitude)
+{
+    if (energy > 0.0) {
+        // Get the frequency range width.
+        // If there is only one non-zero component, width is 0.
+        // If all components are equal, width is 1.
+        float width = (sum_amplitude /  (max_amplitude + EPSILON) - 1.0) /
+                        (m_filter_bank->get_num_scales() - 1);
+
+        // The weighting function is a sigmoid.
+        float weight = 1.0 + exp(m_sigmoid_gain * (m_sigmoid_cutoff - width));
+        energy /= weight;
+    }
+    else // Negative weights are simply set to 0.
+        energy = 0.0;
+
+    return energy;
 }
 
 

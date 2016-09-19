@@ -151,13 +151,37 @@ private:
      * @param[in]  scale     Filter scale parameter.
      * @param[in]  azimuth   Filter azimuth parameter.
      * @param[in]  elevation Filter elevation parameter.
-     *
      */
     void compute_filtering(fftwf_complex *f_output,
                            fftwf_complex *f_input,
                            size_t         scale,
                            size_t         azimuth,
                            size_t         elevation);
+
+    /**
+     * @brief Automatically estimates the noise energy threshold from the
+     * amplitudes of filter responses.
+     *
+     * @param[in] sum_amplitude Array of sums of filter response amplitudes
+     * accumulated over all the scales of the bank of filters.
+     *
+     * @return The estimated noise energy threshold.
+     */
+    float estimate_noise_threshold(float *sum_amplitude);
+
+    /**
+     * @brief Applies an energy weighting function to suppress responses that
+     * locally occur only to a few frequency components.
+     *
+     * @param[in] energy        Local energy value.
+     * @param[in] sum_amplitude Local summed filter response amplitude.
+     * @param[in] max_amplitude Local maximum filter response amplitude.
+     *
+     * @return The weighted local energy value, as a positive real number.
+     */
+    float apply_energy_weighting(float energy,
+                                 float sum_amplitude,
+                                 float max_amplitude);
 
     /** @brief Setter for m_filename_prefix. */
     void set_filename_prefix(std::string filename_prefix) {

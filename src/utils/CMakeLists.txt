@@ -17,7 +17,9 @@ TARGET_LINK_LIBRARIES(
     ${LIBRARY_NAME}
     m
     fftw3f
-    fftw3f_threads)
+    fftw3f_threads
+    gsl
+    gslcblas)
 TARGET_INCLUDE_DIRECTORIES(
     ${LIBRARY_NAME}
     PUBLIC ${CMAKE_SOURCE_DIR}/${PROJECT_NAME})

@@ -140,6 +140,33 @@ hanning(triple<size_t> xyz, triple<size_t> sizes)
 }
 
 
+void
+eigen(double *M, double *eigenvalues, double *eigenvectors)
+{
+    const size_t dimensions = 3;
+
+    // Allocate GSL data.
+    gsl_matrix_view m = gsl_matrix_view_array(M, dimensions, dimensions);
+    gsl_vector *evals = gsl_vector_alloc(dimensions);
+    gsl_matrix *evecs = gsl_matrix_alloc(dimensions, dimensions);
+    gsl_eigen_symmv_workspace *w = gsl_eigen_symmv_alloc(dimensions);
+
+    // Calculate the eigenvalues and eigenvectors of M.
+    gsl_eigen_symmv(&m.matrix, evals, evecs, w);
+    gsl_eigen_symmv_free(w);
+
+    // Sort the eigenvectors in descending order by (signed) eigenvalues.
+    gsl_eigen_symmv_sort(evals, evecs, GSL_EIGEN_SORT_VAL_DESC);
+
+    // Set each eigenvector as a column of the resulting matrix.
+    for (size_t i = 0; i < dimensions; ++i) {
+        eigenvalues[i] = gsl_vector_get(evals, i);
+        for (size_t j = 0; j < dimensions; ++j)
+            eigenvectors[i*dimensions + j] = gsl_matrix_get(evecs, j, i);
+    }
+}
+
+
 float
 median(float *array, size_t size)
 {
