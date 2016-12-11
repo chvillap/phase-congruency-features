@@ -1,6 +1,6 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 3.6)
 
-PROJECT("2-3D phase congruency")
+PROJECT("2D and 3D phase congruency")
 
 SET(INCLUDE_OUTPUT_PATH
     ${CMAKE_BINARY_DIR}/include

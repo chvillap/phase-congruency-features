@@ -4,10 +4,10 @@ PROJECT("phase_congruency")
 
 # -------------------------------------------------------------------------------------------------
 
-# FIND_PACKAGE(ITK REQUIRED)
-# IF(ITK_FOUND)
-#     INCLUDE(${ITK_USE_FILE})
-# ENDIF(ITK_FOUND)
+FIND_PACKAGE(ITK REQUIRED)
+IF(ITK_FOUND)
+    INCLUDE(${ITK_USE_FILE})
+ENDIF(ITK_FOUND)
 
 # -------------------------------------------------------------------------------------------------
 
