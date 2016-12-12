@@ -23,6 +23,7 @@
 #include "assert2.h"
 #include "types.h"
 #include "math_functions.h"
+#include "image_io.h"
 
 #define LOG_GABOR_FILTER_BANK_VERBOSE_ON
 #define LOG_GABOR_FILTER_BANK_DEBUG_ON
@@ -37,7 +38,7 @@ namespace bip
  *
  * @brief A bank of 2D/3D log-Gabor filters generated in the frequency domain,
  * which can be easily saved as files for further reuse.
- * 
+ *
  * @attention Your filename prefix must not include the "_#_" sequence.
  *
  * @see https://en.wikipedia.org/wiki/Log_Gabor_filter
@@ -48,7 +49,7 @@ class log_gabor_filter_bank
 public:
     /**
      * @brief Constructor method.
-     * 
+     *
      * @param[in] filename_prefix  Prefix of the filter file names.
      * @param[in] sizes            Filter size in each dimension.
      * @param[in] num_scales       Number of filter scales.
@@ -87,7 +88,7 @@ public:
 
     /**
      * @brief Get a specific filter of the bank from file.
-     * 
+     *
      * @param[in] scale     Filter scale parameter.
      * @param[in] azimuth   Filter azimuth parameter.
      * @param[in] elevation Filter elevation parameter.
@@ -105,7 +106,7 @@ public:
 
     /**
      * @brief Reads the parameters of the filter bank from a header file.
-     * 
+     *
      * @param[in] filename Header file name.
      *
      * @returns An instance of the log-Gabor filter bank object.
@@ -116,14 +117,14 @@ public:
 
     /**
      * @brief Writes the parameters of the filter bank into a header file.
-     * 
+     *
      * @param[in] bof Reference to the log-Gabor filter bank object.
      */
     static void write_parameters(log_gabor_filter_bank &bof);
 
     /**
      * @brief Gets the number of azimuth angles in a specific elevation.
-     * 
+     *
      * @param[in] elevation Elevation index (not angle!).
      *
      * @returns Number of azimuth angles in the specified elevation.
@@ -139,7 +140,7 @@ public:
     /**
      * @brief Calculates the total number of filter orientations according to
      * the numbers of azimuth and elevation angles and the filter sampling.
-     * 
+     *
      * @returns The total number of filter orientations.
      */
     size_t get_num_orientations() const {
@@ -212,7 +213,7 @@ public:
 private:
     /**
      * @brief Creates a single log-Gabor filter.
-     * 
+     *
      * @param[in] freq0  Central frequency value.
      * @param[in] phi0   Azimuth angle (in radians).
      * @param[in] theta0 Elevation angle (in radians).
@@ -225,7 +226,7 @@ private:
 
     /**
      * @brief Reads a single log-Gabor filter from file.
-     * 
+     *
      * @param[in] scale     Filter scale parameter.
      * @param[in] azimuth   Filter azimuth parameter.
      * @param[in] elevation Filter elevation parameter.
@@ -238,7 +239,7 @@ private:
 
     /**
      * @brief Writes a single log-Gabor filter into a file.
-     * 
+     *
      * @param[in] filter The filter data array.
      * @param[in] scale     Filter scale parameter.
      * @param[in] azimuth   Filter azimuth parameter.

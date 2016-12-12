@@ -50,7 +50,7 @@ std::ostream&
 phase_congruency::
 print(std::ostream &os) const
 {
-    os << "{" 
+    os << "{"
        << "m_filename_prefix: " << m_filename_prefix << ", "
        << "m_filter_bank: "     << m_filter_bank     << ", "
        << "m_sizes: "           << m_sizes           << ", "
@@ -125,7 +125,7 @@ compute()
     };
     triple<float> *directional_pc_max_map =
         new triple<float>[total_size]();
-    
+
 
     #ifdef PHASE_CONGRUENCY_VERBOSE_ON
         std::cout << "Computing the PC maps...\n";
@@ -199,7 +199,7 @@ compute()
                 }
 
                 #ifdef PHASE_CONGRUENCY_VERBOSE_ON
-                    std::cout << " - done";
+                    std::cout << " - done\n";
                 #endif
             }
 
@@ -386,7 +386,7 @@ compute()
                     // scaled by their respective eigenvalues.
                     moments_eigenvectors_maps[d][i][0] *= eigenvalues[d];
                     moments_eigenvectors_maps[d][i][1] *= eigenvalues[d];
-                    moments_eigenvectors_maps[d][i][2] *= eigenvalues[d];                    
+                    moments_eigenvectors_maps[d][i][2] *= eigenvalues[d];
                 }
             }
 
@@ -406,7 +406,7 @@ compute()
          * Use some library to write 2D/3D images here.
          */
     }
-    
+
     // Clean up memory.
     delete[] cov_xx;
     delete[] cov_xy;
@@ -420,7 +420,7 @@ compute()
     }
 
     #ifdef PHASE_CONGRUENCY_VERBOSE_ON
-        std::cout << " - done";
+        std::cout << " - done\n";
     #endif
 }
 
@@ -477,7 +477,7 @@ compute_shifted_FFT(fftwf_complex *f_target)
     #endif
 
     #ifdef PHASE_CONGRUENCY_VERBOSE_ON
-        std::cout << " - done";
+        std::cout << " - done\n";
     #endif
 }
 
@@ -505,9 +505,9 @@ compute_filtering(fftwf_complex *f_output,
         std::cout << "   Processing filter: "
                   << "sc = "
                   << std::setfill('0') << std::setw(3) << scale
-                  << "az = "
+                  << ", az = "
                   << std::setfill('0') << std::setw(3) << azimuth
-                  << "el = "
+                  << ", el = "
                   << std::setfill('0') << std::setw(3) << elevation;
     #endif
 

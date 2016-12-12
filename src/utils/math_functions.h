@@ -40,7 +40,7 @@ extern const float EPSILON;
  * @fn fp_equal
  *
  * @brief Equality test for floating-point numbers.
- * 
+ *
  * @param[in] n1       First operand.
  * @param[in] n2       Second operand.
  * @param[in] maxerror Maximum error below which n1 and n2 are considered equal.
@@ -56,7 +56,7 @@ bool fp_equal(float n1, float n2, float maxerror = EPSILON);
  * @fn sqr
  *
  * @brief Computes the square of a real number.
- * 
+ *
  * @param[in] n Input number.
  *
  * @returns The square n^2 of the input number.
@@ -70,7 +70,7 @@ float sqr(float n) {
  * @fn sign
  *
  * @brief Sign function of a real number.
- * 
+ *
  * @param[in] n Input number.
  *
  * @returns -1 for negative numbers, 1 for positive numbers, 0 for zero.
@@ -84,7 +84,7 @@ int sign(float n) {
  * @fn posmod
  *
  * @brief Positive modulus (remainder of two real numbers).
- * 
+ *
  * @param[in] n First operand (dividend).
  * @param[in] m Second operand (divisor).
  *
@@ -100,7 +100,7 @@ float posmod(float n, float m) {
  * @fn rad2deg
  *
  * @brief Converts radians to degrees.
- * 
+ *
  * @param[in] rad A measure in radians.
  *
  * @returns The same measure in degrees.
@@ -128,7 +128,7 @@ float deg2rad(float deg) {
  * @fn cart2sph
  *
  * @brief Converts cartesian coordinates to spherical coordinates.
- * 
+ *
  * @param[in] cart A position in Cartesian coordinates (x, y, z).
  *
  * @returns The same position in spherical coordinates (rho, phi, theta).
@@ -141,7 +141,7 @@ triple<float> cart2sph(triple<float> cart);
  * @fn sph2cart
  *
  * @brief Converts spherical coordinates to cartesian coordinates.
- * 
+ *
  * @param[in] sph Spherical coordinates (rho, phi, theta).
  *
  * @returns The same position in cartesian coordinates (x, y, z).
@@ -155,9 +155,9 @@ triple<float> sph2cart(triple<float> sph);
  *
  * @brief Computes the forward/backward Fast Fourier Transform (FFT) on a 2D/3D
  *        matrix.
- * 
+ *
  * @param[in] M        Input matrix.
- * @param[in] sizes    Number of matrix elements by dimension.
+ * @param[in] sizes    Number of matrix elements per dimension.
  * @param[in] backward Tells whether it should compute the backward FFT.
  *
  * @warning The FFT algorithm works faster for matrices whose dimensions are
@@ -171,7 +171,7 @@ void FFT(fftwf_complex *M, triple<size_t> sizes, bool backward = false);
  * @fn hanning
  *
  * @brief Computes the Hanning window function value at a given position.
- * 
+ *
  * @param[in] xyz   Position in cartesian coordinates.
  * @param[in] sizes Domain size for each dimension.
  *
@@ -183,7 +183,7 @@ float hanning(triple<size_t> xyz, triple<size_t> sizes);
  * @fn eigen
  *
  * @brief Computes the eigenvalues and eigenvectors of a given matrix.
- * 
+ *
  * @param[in]  M            Input matrix.
  * @param[out] eigenvalues  Output array of ordered eigenvalues.
  * @param[out] eigenvectors Output array of ordered eigenvectors.
@@ -194,7 +194,7 @@ void eigen(double *M, double *eigenvalues, double *eigenvectors);
  * @fn median
  *
  * @brief Computes the median value in an array.
- * 
+ *
  * @param[in] array Input array.
  * @param[in] size  Number of elements in the array.
  *
@@ -206,7 +206,7 @@ float median(float *array, size_t size);
  * @fn normalize_min_max
  *
  * @brief Normalizes array values to the [new_min, new_max] range.
- * 
+ *
  * @param[in] array   Input array.
  * @param[in] size    Number of elements in the array.
  * @param[in] new_min Target minimum value after normalization.

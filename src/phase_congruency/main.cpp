@@ -20,7 +20,7 @@
 
 // Default argument values.
 #define DEFAULT_NOISE_THRESHOLD "-1.0"
-#define DEFAULT_NOISE_STD       "3.0" 
+#define DEFAULT_NOISE_STD       "3.0"
 #define DEFAULT_SIGMOID_GAIN    "10.0"
 #define DEFAULT_SIGMOID_CUTOFF  "0.5"
 
@@ -112,7 +112,7 @@ int main(int argc, char *argv[])
      * And then compare the mask size to the input image size.
      */
 
-    bip::log_gabor_filter_bank *lgfb =
+    bip::log_gabor_filter_bank *lgbf =
         bip::log_gabor_filter_bank::read_parameters(filename_filter_bank);
 
     // ------------------------------------------------------------------------
@@ -127,7 +127,7 @@ int main(int argc, char *argv[])
                 }
     }
 
-    bip::phase_congruency pc(filename_output_prefix, input_image, lgfb, sizes,
+    bip::phase_congruency pc(filename_output_prefix, input_image, lgbf, sizes,
                              input_mask, noise_threshold, noise_std,
                              sigmoid_gain, sigmoid_cutoff);
     pc.compute();
@@ -138,7 +138,7 @@ int main(int argc, char *argv[])
     if (input_mask != NULL)
         delete[] input_mask;
     delete[] input_image;
-    delete lgfb;
+    delete lgbf;
 
     return EXIT_SUCCESS;
 }

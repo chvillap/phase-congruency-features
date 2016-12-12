@@ -25,11 +25,12 @@ namespace bip
 namespace debug
 {
 
+
 /**
  * @fn _assert2
  *
  * @brief Internal function to display an assertion failed message.
- * 
+ *
  * @param[in] passed    Tells whether the assertion has passed or not.
  * @param[in] assertion Evaluated assertion.
  * @param[in] file      Source file name.
@@ -46,7 +47,7 @@ void _assert2(bool passed, const char *assertion, const char *file, long line);
  * @def assert2
  *
  * @brief Macro for assertion checking that works for any build type.
- * 
+ *
  * @param[in] expr Assertion expression.
  *
  * @see _assert2

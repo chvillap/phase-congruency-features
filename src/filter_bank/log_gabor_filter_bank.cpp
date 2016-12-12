@@ -75,7 +75,7 @@ std::ostream&
 log_gabor_filter_bank::
 print(std::ostream &os) const
 {
-    os << "{" 
+    os << "{"
        << "m_filename_prefix: "  << m_filename_prefix  << ", "
        << "m_sizes: "            << m_sizes            << ", "
        << "m_num_scales: "       << m_num_scales       << ", "
@@ -114,9 +114,9 @@ get_filter(size_t scale, size_t azimuth, size_t elevation)
 
     // Try to read an existing filter from file.
     float *filter = read_filter(scale, azimuth, elevation);
-  
+
     #ifdef LOG_GABOR_FILTER_BANK_DEBUG_ON
-        std::cout << " - done";
+        std::cout << " - done\n";
     #endif
 
     return filter;
@@ -165,9 +165,9 @@ compute()
                     std::cout << "Creating filter: "
                               << "sc = "
                               << std::setfill('0') << std::setw(3) << s
-                              << "az = "
+                              << ", az = "
                               << std::setfill('0') << std::setw(3) << a
-                              << "el = "
+                              << ", el = "
                               << std::setfill('0') << std::setw(3) << e;
                 #endif
 
@@ -177,7 +177,7 @@ compute()
                 delete[] filter;
 
                 #ifdef LOG_GABOR_FILTER_BANK_VERBOSE_ON
-                    std::cout << " - done";
+                    std::cout << " - done\n";
                 #endif
             }
         }
@@ -227,7 +227,7 @@ read_parameters(std::string filename)
 
     // The filename prefix is everything that comes before "_#_".
     std::string filename_prefix(filename.substr(0, filename.find("_#_")));
-    
+
     // Allocate the bank of filters.
     log_gabor_filter_bank *bof =
         new log_gabor_filter_bank(filename_prefix, sizes, num_scales,
@@ -237,7 +237,7 @@ read_parameters(std::string filename)
                                   uniform_sampling);
 
     #ifdef LOG_GABOR_FILTER_BANK_VERBOSE_ON
-        std::cout << " - done";
+        std::cout << " - done\n";
     #endif
 
     return bof;
@@ -304,9 +304,9 @@ write_parameters(log_gabor_filter_bank &bof)
     ofs.write(reinterpret_cast<char*>(&lowpass_cutoff),   sizeof(float));
     ofs.write(reinterpret_cast<char*>(&uniform_sampling), sizeof(bool));
     ofs.close();
-    
+
     #ifdef LOG_GABOR_FILTER_BANK_VERBOSE_ON
-        std::cout << " - done";
+        std::cout << " - done\n";
     #endif
 }
 
@@ -406,11 +406,9 @@ read_filter(size_t scale, size_t azimuth, size_t elevation)
 
     std::string filename(m_filename_prefix + std::string(filename_suffix));
 
-    /*
-     * TODO:
-     * Use some library to read 2D/3D images here.
-     */
-    float *filter = NULL;
+    // Read the filter image from a file.
+    float *filter = io::image2array<float, 3>(
+                        io::read_image<float, 3>(filename));
 
     return filter;
 }
@@ -428,10 +426,9 @@ write_filter(float *filter, size_t scale, size_t azimuth, size_t elevation)
 
     std::string filename(m_filename_prefix + std::string(filename_suffix));
 
-    /*
-     * TODO:
-     * Use some library to write 2D/3D images here.
-     */
+    // Write the filter image into a file.
+    io::write_image<float, 3>(
+        filename, io::array2image<float, 3>(filter, m_sizes));
 }
 
 
