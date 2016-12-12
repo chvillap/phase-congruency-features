@@ -18,7 +18,14 @@ More details about phase congruency and its applications can be found in the fol
 
 ...among several others. In addition, [Dr. Peter Kovesi's website](http://www.peterkovesi.com) contains some great MATLAB implementations for 2D images.
 
+## Dependencies
+
+- [CMake 3.6](https://cmake.org)
+- [FFTW 3.3](http://www.fftw.org)
+- [GSL 2.2](https://www.gnu.org/software/gsl)
+- [ITK 4.10](https://www.itk.org)
+
 ## Notes
 
-- [CMake](https://cmake.org/) and [FFTW](http://www.fftw.org/) are required to compile the source code;
 - This implementation does not make use of [monogenic filters](https://www.math.ucdavis.edu/~saito/data/phase2/monogenic.pdf) due to the application it is aimed to. So be aware that this is certainly not the fastest implementation that can be achieved.
+- The NIfTI (.nii) format is used for most image outputs. You can use softwares like [3D Slicer](https://www.slicer.org) and [ITK-Snap](http://www.itksnap.org/pmwiki/pmwiki.php) to open such files.
