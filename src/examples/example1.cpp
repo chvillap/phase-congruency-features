@@ -11,9 +11,9 @@
 
 #include <iostream>
 #include <string>
-#include "log_gabor_filter_bank.h"
-#include "image_io.h"
 #include "types.h"
+#include "image_io.h"
+#include "log_gabor_filter_bank.h"
 
 
 int main(int argc, char *argv[])
@@ -23,17 +23,17 @@ int main(int argc, char *argv[])
         bip::triple<size_t> size = {128, 128, 1};
         bip::log_gabor_filter_bank lgbf_1(
             "log_gabor", // Filename prefix.
-            size,           // Filter size (z=1 for 2D).
-            3,              // Scales.
-            6,              // Azimuths.
-            1,              // Elevations (1 for 2D).
-            1./3,           // Max central frequency.
-            2.1,            // Multiplicative factor.
-            0.55,           // Frequency spread ratio.
-            1.2,            // Angular spread ratio.
-            15,             // Butterworth order.
-            0.45,           // Butterworth cutoff.
-            false           // Uniform sampling?
+            size,        // Filter size (z=1 for 2D).
+            3,           // Scales.
+            6,           // Azimuths.
+            1,           // Elevations (1 for 2D).
+            1./3,        // Max central frequency.
+            2.1,         // Multiplicative factor.
+            0.55,        // Frequency spread ratio.
+            1.2,         // Angular spread ratio.
+            15,          // Butterworth order.
+            0.45,        // Butterworth cutoff.
+            false        // Uniform sampling?
         );
         bip::log_gabor_filter_bank::write_parameters(lgbf_1);
         lgbf_1.compute();

@@ -14,6 +14,7 @@
 #include <string>
 #include "CmdLine.h"
 #include "types.h"
+#include "image_io.h"
 #include "log_gabor_filter_bank.h"
 #include "phase_congruency.h"
 
@@ -97,27 +98,40 @@ int main(int argc, char *argv[])
     std::string filename_mask = cmd.GetSafeArgument("-mask", 0, "");
     bool hanning_flag = cmd.HasSwitch("-hann");
 
-    /*
-     * TODO:
-     * Use some library to read 2D/3D images here.
-     * And then get the image size.
-     */
-    float *input_image = NULL;
-    bip::triple<size_t> sizes;
+    // ITK typedefs.
+    const int dims = 3;
+    typedef itk::Image<float, dims> TImage;
+    typedef itk::Image<bool, dims>  TMask;
 
+    // Read the input image.
+    TImage::Pointer itk_input_image = bip::io::read_image<float, dims>(
+        filename_input);
+    float *input_image = bip::io::image2array<float, dims>(itk_input_image);
+
+    // Get the input image size.
+    bip::triple<size_t> sizes = {
+        itk_input_image->GetBufferedRegion().GetSize()[0],
+        itk_input_image->GetBufferedRegion().GetSize()[1],
+        itk_input_image->GetBufferedRegion().GetSize()[2]
+    };
+
+    // Read the mask image (if needed).
     bool *input_mask = NULL;
-    /*
-     * TODO:
-     * Use some library to read 2D/3D images here.
-     * And then compare the mask size to the input image size.
-     */
+    if (!filename_mask.empty()) {
+        TMask::Pointer itk_mask_image = bip::io::read_image<bool, dims>(
+            filename_mask);
+        input_mask = bip::io::image2array<bool, dims>(itk_mask_image);
+    }
 
+    // Read the bank of log-Gabor filters (metadata).
     bip::log_gabor_filter_bank *lgbf =
         bip::log_gabor_filter_bank::read_parameters(filename_filter_bank);
 
     // ------------------------------------------------------------------------
     // Computing the phase congruency and saving the results:
 
+    // Apply a Hanning window to the image to avoid problems with
+    // spectral leakage.
     if (hanning_flag) {
         for (size_t i = 0, z = 0; z < sizes[2]; ++z)
             for (size_t y = 0; y < sizes[1]; ++y)
