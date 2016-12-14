@@ -79,6 +79,11 @@ compute()
      * parallelized too. The performance could be greatly improved with that.
      */
 
+    char filename[512];
+
+    // This
+    typedef itk::Vector<float, 3> TVector;
+
     // Get the total sizes in space and frequency domains.
     const size_t total_size   = m_sizes[0] * m_sizes[1] * m_sizes[2];
     const size_t f_total_size = total_size * sizeof(fftwf_complex);
@@ -118,13 +123,12 @@ compute()
         new float[total_size](),
         new float[total_size]()
     };
-    triple<float> *moments_eigenvectors_maps[3] = {
-        new triple<float>[total_size](),
-        new triple<float>[total_size](),
-        new triple<float>[total_size]()
+    TVector *moments_eigenvectors_maps[3] = {
+        new TVector[total_size](),
+        new TVector[total_size](),
+        new TVector[total_size]()
     };
-    triple<float> *directional_pc_max_map =
-        new triple<float>[total_size]();
+    TVector *directional_pc_max_map = new TVector[total_size]();
 
 
     #ifdef PHASE_CONGRUENCY_VERBOSE_ON
@@ -300,28 +304,27 @@ compute()
             }
 
             // Write the directional PC map.
-            /*
-             * TODO:
-             * Use some library to write 2D/3D images here.
-             */
+            sprintf(filename, "%s_directional_PC_%lu.nii",
+                    m_filename_prefix.c_str(), o);
+            io::write_image<float, 3>(filename,
+                io::array2image<float, 3>(directional_pc_map, m_sizes));
 
             ++o; // Move on to the next orientation.
         }
     }
 
     // Write the directional PC maxima map.
-    /*
-     * TODO:
-     * Use some library to write 2D/3D images here.
-     */
+    sprintf(filename, "%s_directional_PC_max.nii", m_filename_prefix.c_str());
+    io::write_image<TVector, 3>(filename,
+        io::array2image<TVector, 3>(directional_pc_max_map, m_sizes));
 
-    // Compute and write the final phase congruency map.
+    // Compute the final phase congruency map.
     for (size_t i = 0; i < total_size; ++i)
         pc_map[i] = total_sum_energy[i] / (total_sum_amplitude[i] + EPSILON);
-    /*
-     * TODO:
-     * Use some library to write 2D/3D images here.
-     */
+
+    // Write the final phase congruency map.
+    sprintf(filename, "%s_PC.nii", m_filename_prefix.c_str());
+    io::write_image<float, 3>(filename, io::array2image<float, 3>(pc_map, m_sizes));
 
     // Clean up the memory.
     delete[] sum_amplitude;
@@ -390,21 +393,17 @@ compute()
                 }
             }
 
-    // Write all the eigenvalues and eigenvectors maps.
+    // Write all the maps of eigenvalues and eigenvectors.
     for (size_t d = 0; d < 3; ++d) {
-        char filename_suffix[16];
+        sprintf(filename, "%s_eigenvalues_%u.nii", m_filename_prefix.c_str(),
+                d);
+        io::write_image<float, 3>(filename,
+            io::array2image<float, 3>(moments_eigenvalues_maps[d], m_sizes));
 
-        sprintf(filename_suffix, "eigenvalues_%u", d);
-        /*
-        * TODO:
-        * Use some library to write 2D/3D images here.
-        */
-
-        sprintf(filename_suffix, "eigenvectors_%u", d);
-        /*
-         * TODO:
-         * Use some library to write 2D/3D images here.
-         */
+        sprintf(filename, "%s_eigenvectors_%u.nii", m_filename_prefix.c_str(),
+                d);
+        io::write_image<TVector, 3>(filename,
+            io::array2image<TVector, 3>(moments_eigenvectors_maps[d], m_sizes));
     }
 
     // Clean up memory.
@@ -459,6 +458,8 @@ compute_shifted_FFT(fftwf_complex *f_target)
     // Save the resulting frequency spectrum.
     #ifdef PHASE_CONGRUENCY_DEBUG_ON
     {
+        char filename[512];
+
         size_t total_size = m_sizes[0] * m_sizes[1] * m_sizes[2];
         float *f_spectrum = new float[total_size]();
 
@@ -468,10 +469,10 @@ compute_shifted_FFT(fftwf_complex *f_target)
 
         normalize_min_max(f_spectrum, total_size, 0.0, 1.0);
 
-        /*
-         * TODO:
-         * Use some library to write 2D/3D images here.
-         */
+        sprintf(filename, "%s_spectrum.nii", m_filename_prefix.c_str());
+        io::write_image<float, 3>(filename,
+            io::array2image<float, 3>(f_spectrum, m_sizes));
+
         delete[] f_spectrum;
     }
     #endif
@@ -536,6 +537,8 @@ compute_filtering(fftwf_complex *f_output,
     // Save the filter responses (even, odd, amplitude).
     #ifdef PHASE_CONGRUENCY_DEBUG_ON
     {
+        char filename[512];
+
         const size_t total_size = m_sizes[0] * m_sizes[1] * m_sizes[2];
 
         float *f_even      = new float[total_size]();
@@ -551,28 +554,20 @@ compute_filtering(fftwf_complex *f_output,
         normalize_min_max(f_odd,       total_size, -1.0, 1.0);
         normalize_min_max(f_amplitude, total_size,  0.0, 1.0);
 
-        char filename_suffix[16];
+        sprintf(filename, "%s_even_%02u_%02u_%02u.nii",
+                m_filename_prefix.c_str(), scale, azimuth, elevation);
+        io::write_image<float, 3>(filename,
+            io::array2image<float, 3>(f_even, m_sizes));
 
-        sprintf(filename_suffix, "even_%02u_%02u_%02u.nii",
-                scale, azimuth, elevation);
-        /*
-         * TODO:
-         * Use some library to write 2D/3D images here.
-         */
+        sprintf(filename, "%s_odd_%02u_%02u_%02u.nii",
+                m_filename_prefix.c_str(), scale, azimuth, elevation);
+        io::write_image<float, 3>(filename,
+            io::array2image<float, 3>(f_odd, m_sizes));
 
-        sprintf(filename_suffix, "odd_%02u_%02u_%02u.nii",
-                scale, azimuth, elevation);
-        /*
-         * TODO:
-         * Use some library to write 2D/3D images here.
-         */
-
-        sprintf(filename_suffix, "amplitude_%02u_%02u_%02u.nii",
-                scale, azimuth, elevation);
-        /*
-         * TODO:
-         * Use some library to write 2D/3D images here.
-         */
+        sprintf(filename, "%s_amplitude_%02u_%02u_%02u.nii",
+                m_filename_prefix.c_str(), scale, azimuth, elevation);
+        io::write_image<float, 3>(filename,
+            io::array2image<float, 3>(f_amplitude, m_sizes));
 
         delete[] f_even;
         delete[] f_odd;

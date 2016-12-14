@@ -15,6 +15,7 @@
 #include <cstddef>
 #include <cstdlib>
 #include <itkImage.h>
+#include <itkVector.h>
 #include <itkImageRegionIterator.h>
 #include <itkImageRegionConstIterator.h>
 #include <itkImageFileReader.h>

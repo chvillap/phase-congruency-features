@@ -106,9 +106,9 @@ get_filter(size_t scale, size_t azimuth, size_t elevation)
         std::cout << "Getting filter: "
                   << "sc = "
                   << std::setfill('0') << std::setw(3) << scale
-                  << "az = "
+                  << ", az = "
                   << std::setfill('0') << std::setw(3) << azimuth
-                  << "el = "
+                  << ", el = "
                   << std::setfill('0') << std::setw(3) << elevation;
     #endif
 

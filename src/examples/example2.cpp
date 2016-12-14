@@ -19,7 +19,7 @@
 
 int main(int argc, char *argv[])
 {
-    typedef itk::Image<float, 2> TImage;
+    typedef itk::Image<float, 3> TImage;
 
     // Compute the phase congruency for a 2D image.
     // First it creates a bank of 2D log-Gabor filters (you can skip this
@@ -44,9 +44,9 @@ int main(int argc, char *argv[])
         bip::log_gabor_filter_bank::write_parameters(lgbf);
         lgbf.compute();
 
-        TImage::Pointer itk_image = bip::io::read_image<float, 2>(
+        TImage::Pointer itk_image = bip::io::read_image<float, 3>(
             "data/cameraman.tif");
-        float *image = bip::io::image2array<float, 2>(itk_image);
+        float *image = bip::io::image2array<float, 3>(itk_image);
 
         bip::phase_congruency pc(
             "cameraman", // Filename prefix.

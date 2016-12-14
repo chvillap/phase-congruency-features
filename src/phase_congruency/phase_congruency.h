@@ -28,6 +28,7 @@
 #include "assert2.h"
 #include "types.h"
 #include "math_functions.h"
+#include "image_io.h"
 #include "log_gabor_filter_bank.h"
 
 #define PHASE_CONGRUENCY_VERBOSE_ON
@@ -131,11 +132,11 @@ public:
     float get_sigmoid_cutoff() const {
         return m_sigmoid_cutoff;
     }
-    
+
 private:
     /**
      * @brief Computes the DC-shifted forward FFT of the input image.
-     * 
+     *
      * @param[out] target Preallocated complex image to compute.
      *
      * @return The resulting Fourier transform as a complex image.
