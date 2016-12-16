@@ -29,7 +29,7 @@ int main(int argc, char *argv[])
         bip::log_gabor_filter_bank lgbf(
             "log_gabor", // Filename prefix.
             size,        // Filter size (z=1 for 2D).
-            3,           // Scales.
+            4,           // Scales.
             6,           // Azimuths.
             1,           // Elevations (1 for 2D).
             1./3,        // Max central frequency.
