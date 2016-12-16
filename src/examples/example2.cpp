@@ -21,12 +21,11 @@ int main(int argc, char *argv[])
 {
     typedef itk::Image<float, 3> TImage;
 
-    // Compute the phase congruency for a 2D image.
-    // First it creates a bank of 2D log-Gabor filters (you can skip this
-    // if the filters already exist in disk).
     try {
         bip::triple<size_t> size = {256, 256, 1};
 
+        // Create a bank of 3D log-Gabor filters (you can skip this if the
+        // filters already exist in the disk).
         bip::log_gabor_filter_bank lgbf(
             "log_gabor", // Filename prefix.
             size,        // Filter size (z=1 for 2D).
@@ -48,6 +47,8 @@ int main(int argc, char *argv[])
             "data/cameraman.tif");
         float *image = bip::io::image2array<float, 3>(itk_image);
 
+        // Apply the phase congruency technique to detect edges and corners
+        // and other features in the 2D input image.
         bip::phase_congruency pc(
             "cameraman", // Filename prefix.
             image,       // Input image.

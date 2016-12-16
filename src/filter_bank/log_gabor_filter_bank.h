@@ -26,7 +26,7 @@
 #include "image_io.h"
 
 #define LOG_GABOR_FILTER_BANK_VERBOSE_ON
-#define LOG_GABOR_FILTER_BANK_DEBUG_ON
+// #define LOG_GABOR_FILTER_BANK_DEBUG_ON
 
 
 namespace bip

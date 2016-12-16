@@ -32,7 +32,7 @@
 #include "log_gabor_filter_bank.h"
 
 #define PHASE_CONGRUENCY_VERBOSE_ON
-#define PHASE_CONGRUENCY_DEBUG_ON
+// #define PHASE_CONGRUENCY_DEBUG_ON
 
 namespace bip
 {
