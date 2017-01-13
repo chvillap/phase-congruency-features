@@ -6,7 +6,7 @@ C++ implementation of the phase congruency technique for 2D and 3D data.
 
 The phase congruency measure is proportional to the local energy of the signal, therefore it can be calculated via convolution of the original image with a bank of spatial filters in quadrature. A bank of [log-Gabor filters](https://en.wikipedia.org/wiki/Log_Gabor_filter) is especially suited for that, thus an implementation of 2D/3D log-Gabor filters is also part of this project.
 
-More details about phase congruency and its applications can be found in the following papers:
+More details about phase congruency and some of its applications can be found in the following papers:
 
 > Kovesi, P., 2000. Phase congruency: A low-level image invariant. Psychological Research 64, 136-148.
 
@@ -15,6 +15,8 @@ More details about phase congruency and its applications can be found in the fol
 > Ferrari, R.J., Allaire, S., Hope, A., Kim, J., Jaffray, D., Pekar, V., 2011. Detection of point landmarks in 3D medical images via phase congruency model. Journal of the Brazilian Computer Society 17, 117-132.
 
 > Villa Pinto, C.H.; Ferrari, R.J., 2016. Initialization of deformable models in 3D magnetic resonance images guided by automatically detected phase congruency point landmarks. Pattern Recognition Letters 79, 1-7.
+
+> Ferrari, R. J.; Villa Pinto, C. H.; Moreira, C. F., 2016. Detection of the midsagittal plane in MR images using a sheetness measure from eigenanalysis of local 3D phase congruency responses. 2016 IEEE International Conference on Image Processing (ICIP), Phoenix. AZ, USA. p. 2335-2339.
 
 ...among several others. In addition, [Dr. Peter Kovesi's website](http://www.peterkovesi.com) contains some great MATLAB implementations for 2D images.
 
